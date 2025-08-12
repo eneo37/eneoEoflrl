@@ -9,94 +9,74 @@
         left: 30px;
         z-index: 1000; /* 다른 요소보다 위에 보이도록 */
       }
-      /* 게시판 스타일 */
-      #board {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #f9f9f9;
-        font-family: Arial, sans-serif;
-      }
-      #board input, #board textarea {
-        width: 100%;
-        padding: 8px;
-        margin: 6px 0;
-        box-sizing: border-box;
-        font-size: 14px;
-      }
-      #board button {
-        padding: 8px 16px;
-        font-size: 16px;
+      /* 로그아웃 버튼 스타일 */
+      #logoutBtn {
+        position: fixed; /* 화면 고정 위치 */
+        top: 30px;       /* 위에서 30px */
+        right: 30px;     /* 오른쪽에서 30px */
+        padding: 10px 20px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-      }
-      .post {
-        border-bottom: 1px solid #ddd;
-        padding: 10px 0;
-      }
-      .post h4 {
-        margin: 0 0 5px 0;
-      }
-      /* 로그인 UI 스타일 */
-      #auth {
-        max-width: 400px;
-        margin: 20px auto;
-        padding: 10px;
-        border: 1px solid #aaa;
-        border-radius: 8px;
-        background-color: #eef2f7;
-        font-family: Arial, sans-serif;
-      }
-      #auth input {
-        width: 100%;
-        padding: 8px;
-        margin: 6px 0;
-        box-sizing: border-box;
         font-size: 14px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        transition: background-color 0.3s ease;
+        z-index: 1000;
       }
-      #auth button {
-        padding: 8px 16px;
-        font-size: 16px;
-        margin-top: 6px;
+      #logoutBtn:hover {
+        background-color: #d32f2f;
+      }
+      #gameBtn {
+        width: 300px;
+        height: 150px;
+        position: fixed;
+        top: 150px;
+        left: 300px; /* 로그아웃 버튼 왼쪽에 위치하도록 */
+        padding: 10px 20px;
+        background-color: #4CAF50; /* 초록색 계열 */
+        color: white;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-        width: 100%;
+        font-size: 50px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        transition: background-color 0.3s ease;
+        z-index: 1000;
+      }
+      #gameBtn:hover {
+        background-color: #fd0000;
+      }
+      #siwooBtn {
+        width: 300px;
+        height: 150px;
+        position: fixed;
+        top: 400px;
+        left: 300px; 
+        padding: 10px 20px;
+        background-color: #ff0000; /* 초록색 계열 */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 50px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        transition: background-color 0.3s ease;
+        z-index: 1000;
+      }
+      #gameBtn:hover {
+        background-color: #ff0000;
       }
     </style>
 
     <!-- Firebase CDN v8 사용 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
   <body style="background-color: rgb(255,255,255);">
     <h1 style="text-align: center;">기뮨뎌!</h1>
-
-    <!-- 로그인 및 회원가입 UI -->
-    <div id="auth">
-      <h2>회원가입</h2>
-      <input id="signup-email" type="email" placeholder="이메일" />
-      <input id="signup-password" type="password" placeholder="비밀번호" />
-      <button onclick="signUp()">회원가입</button>
-
-      <h2>로그인</h2>
-      <input id="login-email" type="email" placeholder="이메일" />
-      <input id="login-password" type="password" placeholder="비밀번호" />
-      <button onclick="logIn()">로그인</button>
-
-      <button onclick="logOut()">로그아웃</button>
-    </div>
-
-    <!-- 게시판 영역 -->
-    <div id="board" style="display:none;">
-      <h2>게시판</h2>
-      <input id="title" placeholder="제목을 입력하세요" />
-      <textarea id="content" placeholder="내용을 입력하세요" rows="5"></textarea>
-      <button onclick="savePost()">글 저장</button>
-
-      <h3>글 목록</h3>
-      <div id="posts"></div>
-    </div>
 
     <a id="logo-link" href="index.html">
       <img src="logo.png" alt="로고" style="width:200px; height:auto;">
@@ -104,10 +84,16 @@
     <a href="otherpage.html" style="position: absolute; top: 100px; right: 500px;">
       <button>다른 페이지로 이동</button>
     </a>
+     <a href="text.html" style="position: absolute; top: 100px; right: 300px;">
+      <button>게시판</button>
+    </a>
+    <button id="gameBtn">Game</button>
+    <button id="siwooBtn">시우 때리기</button>
+    <button id="logoutBtn">로그아웃</button>
 
     <script>
-      // Firebase 설정
-      const firebaseConfig = {
+      // Firebase 설정 (본인 프로젝트에 맞게 변경 필요)
+      var firebaseConfig = {
         apiKey: "AIzaSyA33Sih8DgMpA5T4x2_jq42P2vVVizsS3s",
         authDomain: "eneo-fa533.firebaseapp.com",
         projectId: "eneo-fa533",
@@ -116,96 +102,28 @@
         appId: "1:444724118614:web:ee7e313326838e803267f7",
         measurementId: "G-JEG9QQP86S"
       };
-
       // Firebase 초기화
       firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-
-      // 회원가입 함수
-      window.signUp = function() {
-        const email = document.getElementById("signup-email").value;
-        const password = document.getElementById("signup-password").value;
-        auth.createUserWithEmailAndPassword(email, password)
-          .then(() => {
-            alert("회원가입 성공!");
-          })
-          .catch(error => {
-            alert("오류: " + error.message);
-          });
-      };
-
-      // 로그인 함수
-      window.logIn = function() {
-        const email = document.getElementById("login-email").value;
-        const password = document.getElementById("login-password").value;
-        auth.signInWithEmailAndPassword(email, password)
-          .then(() => {
-            alert("로그인 성공!");
-          })
-          .catch(error => {
-            alert("오류: " + error.message);
-          });
-      };
 
       // 로그아웃 함수
-      window.logOut = function() {
-        auth.signOut()
+      function logOut() {
+        firebase.auth().signOut()
           .then(() => {
             alert("로그아웃 되었습니다.");
+            window.location.href = 'password.html';  // 로그아웃 후 password.html로 이동
+          })
+          .catch(error => {
+            alert("오류: " + error.message);
           });
-      };
-
-      // 로그인 상태 감지 & UI 제어
-      auth.onAuthStateChanged(user => {
-        if (user) {
-          console.log("로그인 사용자:", user.email);
-          document.getElementById("auth").style.display = "none"; // 로그인 UI 숨기기
-          document.getElementById("board").style.display = "block"; // 게시판 보이기
-        } else {
-          console.log("로그아웃 상태");
-          document.getElementById("auth").style.display = "block";
-          document.getElementById("board").style.display = "none";
-        }
-      });
-
-      // 글 저장 함수
-      window.savePost = function() {
-        const title = document.getElementById("title").value.trim();
-        const content = document.getElementById("content").value.trim();
-        if (!title || !content) {
-          alert("제목과 내용을 모두 입력하세요.");
-          return;
-        }
-
-        db.collection("posts").add({
-          title: title,
-          content: content,
-          date: new Date(),
-          userEmail: auth.currentUser.email  // 작성자 이메일 저장
-        }).then(() => {
-          document.getElementById("title").value = "";
-          document.getElementById("content").value = "";
-        }).catch(error => {
-          alert("저장 중 오류가 발생했습니다: " + error.message);
-        });
-      };
-
-      // 글 목록 불러오기 (실시간 업데이트)
-      db.collection("posts").orderBy("date", "desc").onSnapshot(snapshot => {
-        const postsDiv = document.getElementById("posts");
-        postsDiv.innerHTML = "";
-        snapshot.forEach(doc => {
-          const post = doc.data();
-          const postElement = document.createElement("div");
-          postElement.classList.add("post");
-          postElement.innerHTML = `
-            <h4>${post.title} <small>by ${post.userEmail || "익명"}</small></h4>
-            <p>${post.content}</p>
-          `;
-          postsDiv.appendChild(postElement);
-        });
-      });
+      }
+      document.getElementById('gameBtn').addEventListener('click', () => {
+         window.location.href = 'game.html'; // game.html로 이동
+          });
+      // 버튼에 이벤트 연결
+      document.getElementById('siwooBtn').addEventListener('click', () => {
+         window.location.href = 'siwoo.html'; // siwoo.html로 이동
+          });
+      document.getElementById('logoutBtn').addEventListener('click', logOut);
     </script>
   </body>
 </html>
