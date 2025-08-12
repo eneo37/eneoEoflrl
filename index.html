@@ -64,10 +64,10 @@
       }
     </style>
 
-    <!-- Firebase CDN -->
-    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
+    <!-- Firebase CDN v8 사용 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   </head>
   <body style="background-color: rgb(255,255,255);">
     <h1 style="text-align: center;">기뮨뎌!</h1>
@@ -111,14 +111,14 @@
         apiKey: "AIzaSyA33Sih8DgMpA5T4x2_jq42P2vVVizsS3s",
         authDomain: "eneo-fa533.firebaseapp.com",
         projectId: "eneo-fa533",
-        storageBucket: "eneo-fa533.firebasestorage.app",
+        storageBucket: "eneo-fa533.appspot.com",
         messagingSenderId: "444724118614",
         appId: "1:444724118614:web:ee7e313326838e803267f7",
         measurementId: "G-JEG9QQP86S"
       };
 
       // Firebase 초기화
-      const app = firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
       const db = firebase.firestore();
 
