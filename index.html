@@ -35,43 +35,60 @@
         border-bottom: 1px solid #ddd;
         padding: 10px 0;
       }
-      .post h3 {
+      .post h4 {
         margin: 0 0 5px 0;
+      }
+      /* 로그인 UI 스타일 */
+      #auth {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 10px;
+        border: 1px solid #aaa;
+        border-radius: 8px;
+        background-color: #eef2f7;
+        font-family: Arial, sans-serif;
+      }
+      #auth input {
+        width: 100%;
+        padding: 8px;
+        margin: 6px 0;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      #auth button {
+        padding: 8px 16px;
+        font-size: 16px;
+        margin-top: 6px;
+        cursor: pointer;
+        width: 100%;
       }
     </style>
 
     <!-- Firebase CDN -->
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
   </head>
   <body style="background-color: rgb(255,255,255);">
     <h1 style="text-align: center;">기뮨뎌!</h1>
-    <form action="https://www.google.com/search" method="GET" target="_blank" style="text-align: center;">
-      <input type="text" name="q" placeholder="구글에서 검색" style="width: 300px; padding: 8px;">
-      <button type="submit" style="padding: 8px 16px;">검색</button>
-    </form>
-    
-    <a href="https://www.naver.com" target="_blank" rel="noopener noreferrer">
-      <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA2MTdfMTAg%2FMDAxNjU1NDUxNjA3MjA3.zMcv3h7lw21iYaPoHIqfQYoHnMUslzS3aA-dMnE9PcYg.qizMEP2o9XMfW1zVE3Z91fh4KAC-2d34zgkrMzGBthog.PNG.symentor%2F%25B3%25D7%25C0%25CC%25B9%25F6-%25B7%25CE%25B0%25ED-%25B0%25ED%25C8%25AD%25C1%25FA.png&type=sc960_832" alt="네이버 바로가기" width="300">
-    </a>
-    
-    <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
-      <img src="https://blog.kakaocdn.net/dn/c2yJ7I/btqwXeUM6jI/a3WrMGPo9vakaDzQWepkOK/img.jpg" alt="유튜브 바로가기" width="300">
-    </a>
-    
-    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-      <img src="https://tse1.mm.bing.net/th/id/OIP.pGxzS8SBfcXKMfJ8CfhlVwHaHa?pid=Api&P=0&h=220" alt="인스타 바로가기" width="150">
-    </a>
-    
-    <a id="logo-link" href="index.html">
-      <img src="logo.png" alt="로고" style="width:200px; height:auto;">
-    </a>
-    <a href="otherpage.html" style="position: absolute; top: 100px; right: 500px;">
-      <button>다른 페이지로 이동</button>
-    </a>
+
+    <!-- 로그인 및 회원가입 UI -->
+    <div id="auth">
+      <h2>회원가입</h2>
+      <input id="signup-email" type="email" placeholder="이메일" />
+      <input id="signup-password" type="password" placeholder="비밀번호" />
+      <button onclick="signUp()">회원가입</button>
+
+      <h2>로그인</h2>
+      <input id="login-email" type="email" placeholder="이메일" />
+      <input id="login-password" type="password" placeholder="비밀번호" />
+      <button onclick="logIn()">로그인</button>
+
+      <button onclick="logOut()">로그아웃</button>
+    </div>
 
     <!-- 게시판 영역 -->
-    <div id="board">
+    <div id="board" style="display:none;">
       <h2>게시판</h2>
       <input id="title" placeholder="제목을 입력하세요" />
       <textarea id="content" placeholder="내용을 입력하세요" rows="5"></textarea>
@@ -80,6 +97,13 @@
       <h3>글 목록</h3>
       <div id="posts"></div>
     </div>
+
+    <a id="logo-link" href="index.html">
+      <img src="logo.png" alt="로고" style="width:200px; height:auto;">
+    </a>
+    <a href="otherpage.html" style="position: absolute; top: 100px; right: 500px;">
+      <button>다른 페이지로 이동</button>
+    </a>
 
     <script>
       // Firebase 설정
@@ -95,7 +119,55 @@
 
       // Firebase 초기화
       const app = firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
       const db = firebase.firestore();
+
+      // 회원가입 함수
+      function signUp() {
+        const email = document.getElementById("signup-email").value;
+        const password = document.getElementById("signup-password").value;
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(() => {
+            alert("회원가입 성공!");
+          })
+          .catch(error => {
+            alert("오류: " + error.message);
+          });
+      }
+
+      // 로그인 함수
+      function logIn() {
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        auth.signInWithEmailAndPassword(email, password)
+          .then(() => {
+            alert("로그인 성공!");
+          })
+          .catch(error => {
+            alert("오류: " + error.message);
+          });
+      }
+
+      // 로그아웃 함수
+      function logOut() {
+        auth.signOut()
+          .then(() => {
+            alert("로그아웃 되었습니다.");
+          });
+      }
+
+      // 로그인 상태 감지 & UI 제어
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          console.log("로그인 사용자:", user.email);
+          document.getElementById("auth").style.display = "none"; // 로그인 UI 숨기기
+          document.getElementById("board").style.display = "block"; // 게시판 보이기
+        } else {
+          console.log("로그아웃 상태");
+          document.getElementById("auth").style.display = "block";
+          document.getElementById("board").style.display = "none";
+        }
+      });
 
       // 글 저장 함수
       function savePost() {
@@ -109,9 +181,9 @@
         db.collection("posts").add({
           title: title,
           content: content,
-          date: new Date()
+          date: new Date(),
+          userEmail: auth.currentUser.email  // 작성자 이메일 저장
         }).then(() => {
-          // 저장 성공 후 입력칸 비우기
           document.getElementById("title").value = "";
           document.getElementById("content").value = "";
         }).catch(error => {
@@ -128,7 +200,7 @@
           const postElement = document.createElement("div");
           postElement.classList.add("post");
           postElement.innerHTML = `
-            <h4>${post.title}</h4>
+            <h4>${post.title} <small>by ${post.userEmail || "익명"}</small></h4>
             <p>${post.content}</p>
           `;
           postsDiv.appendChild(postElement);
